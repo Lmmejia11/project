@@ -1,0 +1,84 @@
+<html>
+<head>
+<meta charset="utf-8">
+<script src="https://aframe.io/releases/0.5.0/aframe.min.js"></script> 
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+</head>
+
+
+<body>
+
+<!-- ANIMATIONS -->
+<script type="text/javascript">
+  AFRAME.registerComponent('change-image', {
+    schema: {
+	  obj: {default: 'a-sky'},
+      to: {default: '#cow #horse #duck'}
+    },
+    init: function () {
+	  var data = this.data; 
+      this.el.addEventListener('click', function () {
+		var sky = document.querySelector(data.obj);
+		var images = data.to.split(" ");
+		var randomNumber = Math.floor(Math.random() * images.length);
+        sky.setAttribute('src', images[randomNumber]);
+		
+      });
+    }
+  });
+</script>
+<script type="text/javascript">
+  AFRAME.registerComponent('change-color', {
+    schema: {
+	  obj: {default: 'a-sky'},
+      to: {default: '#F781BE #2E9AFE #F5DA81'}
+    },
+    init: function () {
+	  var data = this.data; 
+      this.el.addEventListener('click', function () {
+		var sky = document.querySelector(data.obj);
+		var colors = data.to.split(" ");
+		var randomNumber = Math.floor(Math.random() * colors.length);
+        sky.setAttribute('color', colors[randomNumber]);
+		
+      });
+    }
+  });
+</script>
+
+<!-- SCENE -->
+<a-scene>
+
+  <!-- assets -->
+  <a-assets>
+    <img id="cow" src="animals/cow.jpg">
+    <img id="duck" src="animals/duck.jpg">
+    <img id="horse" src="animals/horse.jpg">
+	<img id="sky" src="back/sky.jpg">
+	<img id="ciel" src="back/ciel.jpg">
+	<a-asset-item id="brush-obj" src="dd/brushroll.obj"></a-asset-item>
+	<a-asset-item id="brush-mtl" src="dd/brushroll.mtl"></a-asset-item>
+  </a-assets>
+
+  <!-- objecys -->
+  <a-entity position="2 0 -7" scale="0.005 0.005 0.005" obj-model="obj: #brush-obj; mtl: #brush-mtl"></a-entity>
+  <a-sphere position="0 1.25 -5" radius="1.25" src="#cow" 
+	change-image="obj: a-sky; to: #ciel #sky"></a-sphere>
+  <a-box position="-1 0.5 -3" rotation="0 45 0" width="1" height="1" depth="1" color="#4CC3D9" 
+	change-color="obj: a-box; to: #F781BE #2E9AFE #F5DA81"></a-box>
+  <a-cylinder position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
+  
+  <!-- environment -->
+  <a-sky src="#cow" height="2048" radius="30" theta-length="90" width="2048"></a-sky>
+  <a-plane color="#013ADF" rotation="-90 0 0" width="65" height="65" ></a-plane>
+  
+  <!-- camera -->
+  <a-camera>
+    <a-cursor></a-cursor>
+  </a-camera>
+  
+</a-scene>
+
+</body>
+</html>
+
