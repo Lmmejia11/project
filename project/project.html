@@ -18,10 +18,10 @@
     init: function () {
 	  var data = this.data; 
       this.el.addEventListener('click', function () {
-		var sky = document.querySelector(data.obj);
+		var obj = document.querySelector(data.obj);
 		var images = data.to.split(" ");
 		var randomNumber = Math.floor(Math.random() * images.length);
-        sky.setAttribute('src', images[randomNumber]);
+        obj.setAttribute('src', images[randomNumber]);
 		
       });
     }
@@ -36,10 +36,56 @@
     init: function () {
 	  var data = this.data; 
       this.el.addEventListener('click', function () {
-		var sky = document.querySelector(data.obj);
+		var objs = data.obj.split(" ");
 		var colors = data.to.split(" ");
-		var randomNumber = Math.floor(Math.random() * colors.length);
-        sky.setAttribute('color', colors[randomNumber]);
+		for (i=0; i<objs.length; i++){
+			var obj = document.querySelector(objs[i]);
+			var randomNumber = Math.floor(Math.random() * colors.length);
+			obj.setAttribute('color', colors[randomNumber]);
+			obj.setAttribute('src', '#blanc');
+		}
+      });
+    }
+  });
+</script>
+<script type="text/javascript">
+  AFRAME.registerComponent('change-scale', {
+    schema: {
+	  obj: {default: 'a-box'},
+      to: {default: '1 1 1, 2 2 2, 0.5 0.5 0.5'}
+    },
+    init: function () {
+	  var data = this.data; 
+      this.el.addEventListener('click', function () {
+		var objs = data.obj.split(" ");
+		var scales = data.to.split(", ");
+		for (i=0; i<objs.length; i++){
+			var obj = document.querySelector(objs[i]);
+			var randomNumber = Math.floor(Math.random() * scales.length);
+			obj.setAttribute('scale', scales[randomNumber]);
+		}
+      });
+    }
+  });
+</script>
+<script type="text/javascript">
+  AFRAME.registerComponent('flatten', {
+    schema: {
+    },
+    init: function () {
+	  var data = this.data; 
+	  var hay = 1;
+	  var txt=true;
+      this.el.addEventListener('click', function () {
+		
+		if (hay == 1) {txt='false'; hay=0;} else {txt='true';hay=1;}
+		var icos = document.querySelectorAll('a-icosahedron');
+		var octs = document.querySelectorAll('a-octahedron');
+		for (i=0; i<icos.length; i++){
+			icos[i].setAttribute('visible',txt);
+		}
+		for (i=0; i<icos.length; i++){
+			octs[i].setAttribute('visible',txt);}
 		
       });
     }
@@ -55,22 +101,61 @@
     <img id="duck" src="animals/duck.jpg">
     <img id="horse" src="animals/horse.jpg">
 	<img id="sky" src="back/sky.jpg">
+	<img id="sky2" src="back/sky2.jpg">
 	<img id="ciel" src="back/ciel.jpg">
+	<img id="camp" src="back/camp.jpg">
+	<img id="moon" src="back/moon.jpg">
+	<img id="buil" src="back/buil2.jpg">
+	<img id="paris" src="back/paris.png">
+	<img id="vert" src="back/vert.jpg">
+	<img id="blue" src="back/blue.jpg">
+	<img id="red" src="back/red.jpg">
+	<img id="multi" src="back/multi.jpg">
+	<img id="cubes" src="back/cubes.jpg">
+	<img id="blanc" src="back/blanc.jpg">
 	<a-asset-item id="brush-obj" src="dd/brushroll.obj"></a-asset-item>
 	<a-asset-item id="brush-mtl" src="dd/brushroll.mtl"></a-asset-item>
   </a-assets>
 
-  <!-- objecys -->
-  <a-entity position="2 0 -7" scale="0.005 0.005 0.005" obj-model="obj: #brush-obj; mtl: #brush-mtl"></a-entity>
-  <a-sphere position="0 1.25 -5" radius="1.25" src="#cow" 
-	change-image="obj: a-sky; to: #ciel #sky"></a-sphere>
-  <a-box position="-1 0.5 -3" rotation="0 45 0" width="1" height="1" depth="1" color="#4CC3D9" 
-	change-color="obj: a-box; to: #F781BE #2E9AFE #F5DA81"></a-box>
-  <a-cylinder position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
   
-  <!-- environment -->
-  <a-sky src="#cow" height="2048" radius="30" theta-length="90" width="2048"></a-sky>
-  <a-plane color="#013ADF" rotation="-90 0 0" width="65" height="65" ></a-plane>
+  <!-- objects -->
+  <a-entity id="ide1" position="5 1 -7" scale="0.005 0.01 0.01" obj-model="obj: #brush-obj; mtl: #brush-mtl"
+	flatten="">
+	<a-animation attribute="rotation" to="0 360 0" direction="normal" dur="6000" repeat="indefinite"></a-animation>
+  </a-entity>
+  
+  <a-sphere id="ids1" position="0.2 3.2 -6.5" radius="1.25" src="#sky2" 
+	change-image="obj: a-sky; to: #red #blue #vert #multi">
+	<a-animation attribute="position" to="0.2 3.4 -6.5" direction="alternate" dur="2000" repeat="indefinite"></a-animation>
+  </a-sphere>
+  
+  <a-box id="idb1" position="-6.5 4 -2" rotation="0 45 0" width="1" height="1" depth="1" src="#cubes" 
+	change-color="obj: #idb1 #idc1 #ids1; to: #BE81F7 #81F781 #FA5858 #F3F781 #F781F3 #5882FA #F7BE81">
+	<a-animation attribute="rotation" to="360 405 45" direction="alternate" dur="20000" repeat="indefinite"></a-animation>
+  </a-box>
+  
+  <a-cylinder id="idc1" position="-7 1.5 -10" radius="0.5" height="1.5" color="#FFC65D"
+	change-scale="obj: #idb1 #idc1 #ids1; to: 1 1 1, 2 2 2, 0.5 0.5 0.5, 1 3 2">
+	<a-animation attribute="rotation" from="-10 0 0" to="10 0 0" direction="alternate" dur="2000" repeat="indefinite"></a-animation>
+  </a-cylinder>
+  
+  
+  <!-- environment --> <!--height="2048" radius="30" theta-length="90" width="2048"-->
+  <a-sky src="#sky2" height="2048" radius="30" theta-length="90" width="2048"></a-sky>
+  <a-plane color="#997e46" rotation="-90 0 0" width="65" height="65" ></a-plane>
+  
+  <a-icosahedron position="-20.7 -0.94 8.94" color="#FF926B" radius="3" rotation="0 0 0" scale="1 1 1" visible="true" material="color:#FF926B" geometry="primitive:icosahedron;radius:3"></a-icosahedron>
+  <a-icosahedron position="-18.2 0 -10.4" color="#FF926B" radius="3" rotation="0 0 0" scale="1 1 1" visible="true" material="color:#FF926B" geometry="primitive:icosahedron;radius:3"></a-icosahedron>
+  <a-icosahedron position="-18 -0.11 -6.61" color="#FF926B" radius="2" rotation="10 0 0" scale="1 1 1" visible="true" material="color:#FF926B" geometry="primitive:icosahedron;radius:2"></a-icosahedron>
+  <a-icosahedron position="-3.13 -1.05 -21.2" color="#FF926B" radius="2" rotation="10 0 0" scale="1 1 1" visible="true" material="color:#FF926B" geometry="primitive:icosahedron;radius:2"></a-icosahedron>
+  <a-icosahedron position="13.18 -0.52 -0.76" color="#FF926B" radius="4" rotation="" scale="" visible="" material="" geometry=""></a-icosahedron>
+  <a-octahedron position="0.31 -0.5 17.74" color="#FF926B" radius="5" rotation="0 0 0" scale="1 1 1" visible="true" material="color:#FF926B" geometry="primitive:octahedron;radius:5"></a-octahedron>
+  <a-octahedron position="-0.84 0 -23.24" color="#FF926B" radius="5" rotation="0 0 0" scale="1 1 1" visible="true" material="color:#FF926B" geometry="primitive:octahedron;radius:5"></a-octahedron>
+  <a-octahedron position="5.5 -2.56 18.6" color="#FF926B" radius="5" rotation="0 0 0" scale="1 1 1" visible="true" material="color:#FF926B" geometry="primitive:octahedron;radius:5"></a-octahedron>
+  <a-octahedron position="-7.65 -0.4 -21" color="#FF926B" radius="5" rotation="0 0 0" scale="1 1 1" visible="true" material="color:#FF926B" geometry="primitive:octahedron;radius:5"></a-octahedron>
+  <a-octahedron position="15 0 -5" color="#FF926B" radius="2" rotation="0 0 0" scale="1 1 1" visible="true" material="color:#FF926B" geometry="primitive:octahedron;radius:2"></a-octahedron>
+  <a-octahedron position="15.76 -1.3 1.66" color="#FF926B" radius="2" rotation="0 0 0" scale="1 1 1" visible="true" material="color:#FF926B" geometry="primitive:octahedron;radius:2"></a-octahedron>
+  
   
   <!-- camera -->
   <a-camera>
